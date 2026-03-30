@@ -31,5 +31,5 @@
 - 写真から期限を読み取る機能
 - 通知機能
 - 
-- ## 🔗 デモ
-GitHub Pagesで公開後にURLを記載
+## 🔗 デモ
+https://hinata-devv.github.io/kigen-memo/
