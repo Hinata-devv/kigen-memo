@@ -179,7 +179,7 @@ function renderList() {
 
 document.addEventListener("click", async function (e) {
   const btn = e.target.closest(".delete-btn");
-  if (btn) return;
+  if (!btn) return;
 
   console.log("使い切ったボタン押された");
 
