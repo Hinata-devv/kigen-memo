@@ -1,4 +1,5 @@
 let items = [];
+window.items = items;
 let currentFilter = "すべて";
 
 const itemOptions = {
@@ -34,7 +35,7 @@ const itemOptions = {
 window.onload = function () {
   updateItems();
 
-  const saved = localStorage.getItem("kigenItems");
+  //const saved = localStorage.getItem("kigenItems");
 
   if (saved) {
     items = JSON.parse(saved);
@@ -44,11 +45,19 @@ window.onload = function () {
 };
 
 // 追加
-function addItem() {
+async function addItem() {
+  console.log("addItem clicked");
+  console.log("currentUser:", window.currentUser);
+
   const category = document.getElementById("category").value;
   const item = document.getElementById("item").value;
   const openDate = document.getElementById("openDate").value;
   const expiryDate = document.getElementById("expiryDate").value;
+
+  if (!window.currentUser) {
+    alert("先にログインしてください");
+    return;
+  }
 
   if (!expiryDate) {
     alert("期限を入力してね！");
@@ -56,25 +65,27 @@ function addItem() {
   }
 
   const newItem = {
-  id: Date.now(),
-  category,
-  item,
-  openDate,
-  expiryDate
-};
+    category,
+    item,
+    openDate,
+    expiryDate
+  };
 
-  items.push(newItem);
+  console.log("save前", newItem);
 
-  sortItems();
-  saveItems();
+  await window.saveItemToCloud(newItem, window.currentUser.uid);
+
+  console.log("save後");
+
+  const cloudItems = await window.loadItemsFromCloud(window.currentUser.uid);
+  items = cloudItems;
+  window.items = items;
+
   renderList();
-
-  document.getElementById("openDate").value = "";
-  document.getElementById("expiryDate").value = "";
-  document.getElementById("category").selectedIndex = 0;
-  updateItems();
-  saveRecentItem(item);
 }
+
+window.addItem = addItem;
+
 
 // 期限順に並べる
 function sortItems() {
@@ -106,6 +117,9 @@ function renderList() {
   if (filteredItems.length === 0) {
     list.innerHTML = "<p style='text-align:center;color:#888;'>このカテゴリの登録はまだありません</p>";
   }
+
+  window.renderList = renderList;
+
 
   filteredItems.forEach((data) => {
     const today = new Date();
@@ -160,22 +174,22 @@ function renderList() {
 }
 
 // 削除
-function deleteItem(index) {
+async function deleteItem(index) {
+  if (!window.currentUser) return;
 
-  items.splice(index, 1);
+  const target = items[index];
+  if (!target || !target.id) return;
 
-  saveItems();
-  renderList();
+  await window.deleteItemFromCloud(target.id);
 
-}
+  const cloudItems = await window.loadItemsFromCloud(window.currentUser.uid);
+  items = cloudItems;
+  window.items = items;
 
-function clearAll() {
-  if (!confirm("全部削除していい？")) return;
-
-  items = [];
-  saveItems();
   renderList();
 }
+
+window.deleteItem = deleteItem;
 
 const imageInput = document.getElementById("imageInput");
 const preview = document.getElementById("preview");
@@ -719,6 +733,8 @@ await registration.showNotification("きげんmemo", {
     };
   }
 });
+
+
 
 
 
