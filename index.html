@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍓きげんmemo</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+
+</head>
+
+<body>
+
+<header>
+  <div class="title-wrap">
+    <div class="app-icon">🍓</div>
+    <div>
+      <h1>きげんmemo</h1>
+      <p class="subtitle">調味料と粉ものをすっきり管理</p>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="notice-wrap">
+    <div id="noticeCard" class="notice-card"></div>
+    <div id="noticeSummary" class="notice-summary"></div>
+  </div>
+  
+<div class="quick-capture">
+  <h3>📷 期限をすぐ登録</h3>
+
+  <button type="button" class="capture-main-btn" onclick="document.getElementById('cameraInput').click()">
+    📷 カメラで撮る
+  </button>
+
+  <button type="button" class="capture-sub-btn" onclick="document.getElementById('galleryInput').click()">
+    🖼 写真を選ぶ
+  </button>
+
+  <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;">
+  <input type="file" id="galleryInput" accept="image/*" style="display:none;">
+
+  <p class="capture-tip">日付部分を大きく写すと読み取りやすくなります</p>
+
+  <img id="backPreview" class="preview" />
+
+<button type="button" class="retry-btn" onclick="resetImage()">📷 もう一度撮る</button>
+
+<div id="candidateLabel" class="candidate-label" style="display:none;">
+  候補を選ぶと期限欄に反映されます
+</div>
+
+<div id="dateCandidates" class="candidate-box"></div>
+</div>
+
+<div class="form">
+
+<label>カテゴリ</label>
+<select id="category" onchange="updateItems()">
+  <option value="調味料">調味料</option>
+  <option value="ドレッシング">ドレッシング</option>
+  <option value="粉もの">粉もの</option>
+  <option value="冷蔵系">冷蔵系</option>
+</select>
+
+<label>商品</label>
+<select id="item"></select>
+
+<div id="recentItems" class="recent-box"></div>
+
+
+<label>開封日（未入力なら今日）</label>
+<input type="date" id="openDate">
+
+<label>期限</label>
+
+<input type="date" id="expiryDate">
+
+<button type="button" onclick="addItem()">＋登録する</button>
+
+</div>
+
+<div style="display:flex; justify-content:space-between; align-items:center;">
+  <h2>📅 登録リスト</h2>
+  <button class="clear-btn" onclick="clearAll()">リストを空にする</button>
+</div>
+
+<div class="filter-tags">
+  <button type="button" class="filter-btn active" data-filter="すべて" onclick="setFilter('すべて')">すべて</button>
+  <button type="button" class="filter-btn" data-filter="調味料" onclick="setFilter('調味料')">調味料</button>
+  <button type="button" class="filter-btn" data-filter="ドレッシング" onclick="setFilter('ドレッシング')">ドレッシング</button>
+  <button type="button" class="filter-btn" data-filter="粉もの" onclick="setFilter('粉もの')">粉もの</button>
+  <button type="button" class="filter-btn" data-filter="冷蔵系" onclick="setFilter('冷蔵系')">冷蔵系</button>
+</div>
+
+<div id="summary" class="summary-tags"></div>
+
+<ul id="list"></ul>
+
+<div class="footer-space"></div>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+<button id="enableNotificationBtn">通知を有効にする</button>
+<button id="testNotificationBtn">テスト通知</button>
+
+<div class="auth-box">
+  <button id="loginBtn" type="button">Googleでログイン</button>
+  <button id="logoutBtn" type="button" style="display:none;">ログアウト</button>
+  <p id="userInfo">未ログイン</p>
+</div>
+
+<script type="module" src="firebase-auth.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
+

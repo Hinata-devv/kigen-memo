@@ -1,0 +1,8 @@
+{
+  "name": "きげんmemo",
+  "short_name": "きげんmemo",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#a8d5c2"
+}
