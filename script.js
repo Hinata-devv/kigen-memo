@@ -186,24 +186,39 @@ document.addEventListener("click", async function (e) {
   const docId = btn.dataset.id;
   console.log("docId:", docId);
 
-  await deleteItemById(docId);
+  console.log("delete前");
+  await window.deleteItemById(docId);
+  console.log("delete後");
+
 });
 
 // 削除
 async function deleteItemById(docId) {
   console.log("deleteItemById called :", docId);
 
-  if (!window.currentUser) return;
-  if (!docId) return;
+  if (!window.currentUser) {
+    console.log("currentUserがいないので削除できません");
+  return;
+  }
 
-  await window.deleteItemFromCloud(docId);
-  console.log("firestore削除後");
 
-  const cloudItems = await window.loadItemsFromCloud(window.currentUser.uid);
-  console.log("クラウドから再読み込み後", cloudItems);
+  if (!docId) {
+    console.log("docIdがないので削除できません");
+    return;
+  }
+
+ try {
+   await window.deleteItemFromCloud(docId);
+   console.log("firestore削除後");
+
+   const cloudItems = await window.loadItemsFromCloud(window.currentUser.uid);
+   console.log("クラウドから再読み込み後", cloudItems);
 
   window.items = cloudItems;
   renderList();
+  } catch (error) {
+    console.error("削除エラー:", error);
+  }
 }
 
 window.deleteItemById = deleteItemById;
