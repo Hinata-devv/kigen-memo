@@ -161,17 +161,9 @@ function renderList() {
       "<div class='item-meta'>カテゴリ：" + (data.category || "未分類") + "</div>" +
       "<div class='item-meta'>開封日：" + (data.openDate || "未入力") + "</div>" +
       "<div class='item-meta'>期限：" + data.expiryDate + "（" + remainText + "）</div>" +
-      "<button class='delete-btn' data-id='" + data.id + "'>🗑 使い切った</button>"
+      "<button class='delete-btn' data-action='delete' data-id='" + data.id + "'>🗑 使い切った</button>"
 
-      const deleteBtn = li.querySelector(".delete-btn");
-      console.log("deleteBtn found:", deleteBtn, "docId:", data.id,);
-
-      deleteBtn.addEventListener("click", async function () {
-        console.log("使い切ったボタン押された");
-        const docId = this.dataset.id;
-        console.log("docId:", docId);
-        await deleteItemById(docId);
-      });
+    
 
     list.appendChild(li);
   });
@@ -185,19 +177,24 @@ function renderList() {
 
 }
 
+document.addEventListener("click", async function (e) {
+  const btn = e.target.closest(".delete-btn");
+  if (btn) return;
+
+  console.log("使い切ったボタン押された");
+
+  const docId = btn.dataset.id;
+  console.log("docId:", docId);
+
+  await deleteItemById(docId);
+});
+
 // 削除
 async function deleteItemById(docId) {
   console.log("deleteItemById called :", docId);
 
-  if (!window.currentUser) {
-    console.log("currentUserなし");
-    return;
-}
-
-  if (!docId) {
-    console.log("docIdなし");
-    return;
-  }
+  if (!window.currentUser) return;
+  if (!docId) return;
 
   await window.deleteItemFromCloud(docId);
   console.log("firestore削除後");
