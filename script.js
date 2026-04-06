@@ -164,8 +164,12 @@ function renderList() {
       "<button class='delete-btn' data-id='" + data.id + "'>🗑 使い切った</button>"
 
       const deleteBtn = li.querySelector(".delete-btn");
+      console.log("deleteBtn found:", deleteBtn, "docId:", data.id,);
+
       deleteBtn.addEventListener("click", async function () {
+        console.log("使い切ったボタン押された");
         const docId = this.dataset.id;
+        console.log("docId:", docId);
         await deleteItemById(docId);
       });
 
@@ -183,14 +187,25 @@ function renderList() {
 
 // 削除
 async function deleteItemById(docId) {
-  if (!window.currentUser) return;
-  if (!docId) return;
+  console.log("deleteItemById called :", docId);
+
+  if (!window.currentUser) {
+    console.log("currentUserなし");
+    return;
+}
+
+  if (!docId) {
+    console.log("docIdなし");
+    return;
+  }
 
   await window.deleteItemFromCloud(docId);
+  console.log("firestore削除後");
 
   const cloudItems = await window.loadItemsFromCloud(window.currentUser.uid);
-  window.items = cloudItems;
+  console.log("クラウドから再読み込み後", cloudItems);
 
+  window.items = cloudItems;
   renderList();
 }
 
