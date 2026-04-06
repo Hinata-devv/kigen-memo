@@ -187,14 +187,14 @@ document.addEventListener("click", async function (e) {
   console.log("docId:", docId);
 
   console.log("delete前");
-  await window.deleteItemById(docId);
+  await window.deleteItemFromFirestore(docId);
   console.log("delete後");
 
 });
 
 // 削除
-async function deleteItemById(docId) {
-  console.log("deleteItemById called :", docId);
+async function deleteItemFromFirestore(docId) {
+  console.log("deleteItemFromFirestore called :", docId);
 
   if (!window.currentUser) {
     console.log("currentUserがいないので削除できません");
@@ -208,7 +208,7 @@ async function deleteItemById(docId) {
   }
 
  try {
-   await window.deleteItemFromCloud(docId);
+   await window.deleteItemFromCloud(docId) ;
    console.log("firestore削除後");
 
    const cloudItems = await window.loadItemsFromCloud(window.currentUser.uid);
@@ -221,7 +221,7 @@ async function deleteItemById(docId) {
   }
 }
 
-window.deleteItemById = deleteItemById;
+window.deleteItemFromFirestore = deleteItemFromFirestore;
 
 const imageInput = document.getElementById("imageInput");
 const preview = document.getElementById("preview");
