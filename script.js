@@ -39,9 +39,9 @@ window.onload = function () {
 
  // if (saved) {
   //  items = JSON.parse(saved);
-  //  sortItems();
- //   renderList();
-//  }
+   // sortItems();
+  //  renderList();
+  // }
 };
 
 // 追加
@@ -104,6 +104,7 @@ function saveItems() {
 // 表示
 function renderList() {
   items = window.items || [];
+  
   let expired = 0;
   let soon3 = 0;
   let soon7 = 0;
@@ -160,7 +161,7 @@ function renderList() {
       "<div class='item-meta'>カテゴリ：" + (data.category || "未分類") + "</div>" +
       "<div class='item-meta'>開封日：" + (data.openDate || "未入力") + "</div>" +
       "<div class='item-meta'>期限：" + data.expiryDate + "（" + remainText + "）</div>" +
-      "<button class='delete-btn' onclick='deleteItemById(" + data.id + ")'>🗑 使い切った</button>";
+      "<button class='delete-btn' onclick='deleteItemById(\"" + data.id + "\")'>🗑 使い切った</button>"
 
     list.appendChild(li);
   });
@@ -175,22 +176,19 @@ function renderList() {
 }
 
 // 削除
-async function deleteItem(index) {
+async function deleteItemById(docId) {
   if (!window.currentUser) return;
+  if (!docId) return;
 
-  const target = items[index];
-  if (!target || !target.id) return;
-
-  await window.deleteItemFromCloud(target.id);
+  await window.deleteItemFromCloud(docId);
 
   const cloudItems = await window.loadItemsFromCloud(window.currentUser.uid);
-  items = cloudItems;
-  window.items = items;
+  window.items = cloudItems;
 
   renderList();
 }
 
-window.deleteItem = deleteItem;
+window.deleteItemById = deleteItemById;
 
 const imageInput = document.getElementById("imageInput");
 const preview = document.getElementById("preview");
@@ -208,6 +206,28 @@ if (imageInput) {
     reader.readAsDataURL(file);
   });
 }
+
+// リストを空にする
+async function clearAll() {
+  if (!window.currentUser) return;
+
+  const ok = confirm("リストを空にしますか？");
+  if (!ok) return;
+
+  const cloudItems = await window.loadItemsFromCloud(window.currentUser.uid);
+
+  for (const item of cloudItems) {
+    if (item.id) {
+      await window.deleteItemFromCloud(item.id);
+    }
+  }
+
+  window.items = [];
+  renderList();
+}
+
+window.clearAll = clearAll;
+
 
 async function readExpiryFromImage() {
   const file = imageInput.files[0];
@@ -734,8 +754,6 @@ await registration.showNotification("きげんmemo", {
     };
   }
 });
-
-
 
 
 
