@@ -37,11 +37,11 @@ window.onload = function () {
 
   //const saved = localStorage.getItem("kigenItems");
 
-  if (saved) {
-    items = JSON.parse(saved);
-    sortItems();
-    renderList();
-  }
+ // if (saved) {
+  //  items = JSON.parse(saved);
+  //  sortItems();
+ //   renderList();
+//  }
 };
 
 // 追加
