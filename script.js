@@ -161,7 +161,13 @@ function renderList() {
       "<div class='item-meta'>カテゴリ：" + (data.category || "未分類") + "</div>" +
       "<div class='item-meta'>開封日：" + (data.openDate || "未入力") + "</div>" +
       "<div class='item-meta'>期限：" + data.expiryDate + "（" + remainText + "）</div>" +
-      "<button class='delete-btn' onclick='deleteItemById(\"" + data.id + "\")'>🗑 使い切った</button>"
+      "<button class='delete-btn' data-id='" + data.id + "'>🗑 使い切った</button>"
+
+      const deleteBtn = li.querySelector(".delete-btn");
+      deleteBtn.addEventListener("click", async function () {
+        const docId = this.dataset.id;
+        await deleteItemById(docId);
+      });
 
     list.appendChild(li);
   });
