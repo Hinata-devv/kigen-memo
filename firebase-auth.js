@@ -22,15 +22,9 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 window.addEventListener("DOMContentLoaded", () => {
-  console.log("firebase-auth loaded");
-
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
   const userInfo = document.getElementById("userInfo");
-
-  console.log("loginBtn:", loginBtn);
-  console.log("logoutBtn:", logoutBtn);
-  console.log("userInfo:", userInfo);
 
   if (!loginBtn || !logoutBtn || !userInfo) {
     console.error("ログイン用のHTML要素が見つかりません");
@@ -55,15 +49,33 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async (user) => {
+    window.currentUser = user || null;
+
     if (user) {
       userInfo.innerText = `ログイン中: ${user.displayName || user.email}`;
       loginBtn.style.display = "none";
       logoutBtn.style.display = "inline-block";
+
+      if (window.loadItemsFromCloud) {
+        const cloudItems = await window.loadItemsFromCloud(user.uid);
+        window.items = cloudItems;
+
+        if (window.renderList) {
+          window.renderList();
+        }
+      }
     } else {
       userInfo.innerText = "未ログイン";
       loginBtn.style.display = "inline-block";
       logoutBtn.style.display = "none";
+
+      window.items = [];
+
+      if (window.renderList) {
+        window.renderList();
+      }
     }
   });
 });
+
