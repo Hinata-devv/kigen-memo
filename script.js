@@ -103,6 +103,7 @@ function saveItems() {
 
 // 表示
 function renderList() {
+  items = window.items || [];
   let expired = 0;
   let soon3 = 0;
   let soon7 = 0;
