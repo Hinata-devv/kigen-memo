@@ -4,31 +4,26 @@ let currentFilter = "すべて";
 
 const itemOptions = {
   "調味料": [
-    "醤油",
-    "みりん",
-    "酒",
-    "お酢",
-    "ソース",
-    "ケチャップ",
-    "だしの素"
+    "醤油","みりん","料理酒","酢","めんつゆ","ポン酢","白だし"
   ],
   "ドレッシング": [
-    "胡麻ドレッシング",
-    "和風ドレッシング",
-    "シーザードレッシング",
-    "青じそドレッシング"
+    "和風ドレッシング","ごまドレッシング","シーザードレッシング",
+    "青じそドレッシング","中華ドレッシング","イタリアン","フレンチ"
   ],
-  "粉もの": [
-    "小麦粉",
-    "片栗粉",
-    "パン粉",
-    "ホットケーキミックス"
+  "冷蔵食品": [
+    "マヨネーズ","ケチャップ","バター","チーズ","ハム","ベーコン","ウインナー"
   ],
-  "冷蔵系": [
-    "味噌",
-    "バター",
-    "マヨネーズ"
-  ]
+  "乳製品・発酵食品": [
+    "味噌","納豆","キムチ","ヨーグルト","塩こうじ","甘酒","ぬか床"
+  ],
+  "飲みもの": [
+    "牛乳","豆乳","飲むヨーグルト","野菜ジュース","果汁ジュース",
+    "コーヒー（開封後）","お茶（開封後）"
+  ],
+  "レトルト": [
+    "カレー","パスタソース","シチュー","スープ","麻婆豆腐の素","グラタン","ドリア"
+  ],
+  "その他": []
 };
 
 // ページ読み込み時
@@ -50,9 +45,17 @@ async function addItem() {
   console.log("currentUser:", window.currentUser);
 
   const category = document.getElementById("category").value;
-  const item = document.getElementById("item").value;
+  const selectItem = document.getElementById("item").value;
+  const customItem = document.getElementById("customItem").value.trim();
+  const item = customItem || selectItem;
   const openDate = document.getElementById("openDate").value;
   const expiryDate = document.getElementById("expiryDate").value;
+
+  if (!item) {
+  alert("食材を入力してね！");
+  return;
+}
+
 
   if (!window.currentUser) {
     alert("先にログインしてください");
@@ -82,6 +85,9 @@ async function addItem() {
   window.items = items;
 
   renderList();
+
+  document.getElementById("customItem").value = "";
+
 }
 
 window.addItem = addItem;
@@ -104,10 +110,22 @@ function saveItems() {
 // 表示
 function renderList() {
   items = window.items || [];
+
+  items.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
   
   let expired = 0;
   let soon3 = 0;
   let soon7 = 0;
+
+  const categoryClassMap = {
+  "調味料": "cat-seasoning",
+  "ドレッシング": "cat-dressing",
+  "冷蔵食品": "cat-chilled",
+  "乳製品・発酵食品": "cat-fermented",
+  "飲みもの": "cat-drink",
+  "レトルト": "cat-retort", 
+  "その他": "cat-other"
+  };
 
   const list = document.getElementById("list");
   list.innerHTML = "";
@@ -147,6 +165,8 @@ function renderList() {
     }
 
     const li = document.createElement("li");
+    li.classList.add(categoryClassMap[data.category] || "cat-other");
+    
 
     if (diffDays <= 3) {
       li.style.backgroundColor = "#ffecec";
