@@ -862,3 +862,10 @@ h2 {
   color: #4e5a54 !important;
   box-shadow: none !important;
 }
+.add-btn {
+  background: #e7e3dd !important;
+  color: #7a746b !important;
+  box-shadow: none !important;
+  border: none;
+}
+
