@@ -59,3 +59,4 @@ window.loadItemsFromCloud = async function (userId) {
 window.deleteItemFromCloud = async function (docId) {
   await deleteDoc(doc(db, "items", docId));
 };
+
