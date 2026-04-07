@@ -60,6 +60,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (window.loadItemsFromCloud) {
         const cloudItems = await window.loadItemsFromCloud(user.uid);
         window.items = cloudItems;
+        
 
         if (window.renderList) {
           window.renderList();
@@ -78,4 +79,3 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
