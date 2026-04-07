@@ -11,17 +11,36 @@
 
 <body>
 
-<header>
-  <div class="title-wrap">
-    <div class="app-icon">🍓</div>
-    <div>
-      <h1>きげんmemo</h1>
-      <p class="subtitle">調味料と粉ものをすっきり管理</p>
-    </div>
-  </div>
-</header>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon-wrap">
+          <img
+            src="images/strawberry_icon.png"
+            alt="きげんmemoアイコン"
+            class="brand-icon"
+          >
+        </div>
 
-<main>
+        <div class="brand-text">
+          <h1>きげんmemo</h1>
+          <p>食品の期限をすっきり管理</p>
+        </div>
+      </div>
+
+      <div class="header-right-deco">
+        <img
+          src="images/header_condiments.png"
+          alt=""
+          class="header-deco-img"
+        >
+      </div>
+    </div>
+  </header>
+
+ <main>
+
+
 
   <div class="notice-wrap">
     <div id="noticeCard" class="notice-card"></div>
@@ -61,12 +80,17 @@
 <select id="category" onchange="updateItems()">
   <option value="調味料">調味料</option>
   <option value="ドレッシング">ドレッシング</option>
-  <option value="粉もの">粉もの</option>
-  <option value="冷蔵系">冷蔵系</option>
+  <option value="冷蔵食品">冷蔵食品</option>
+  <option value="乳製品・発酵食品">乳製品・発酵食品</option>
+  <option value="飲みもの">飲みもの</option>
+  <option value="レトルト">レトルト</option>
+  <option value="その他">その他</option>
 </select>
 
 <label>商品</label>
 <select id="item"></select>
+
+<input type="text" id="customItem" placeholder="選択肢にない場合はここに入力">
 
 <div id="recentItems" class="recent-box"></div>
 
@@ -105,6 +129,7 @@
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
 <button id="enableNotificationBtn">通知を有効にする</button>
+
 <button id="testNotificationBtn">テスト通知</button>
 
 <div class="auth-box">
