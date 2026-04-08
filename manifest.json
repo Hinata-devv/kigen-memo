@@ -1,8 +1,21 @@
 {
-  "name": "きげんmemo",
-  "short_name": "きげんmemo",
-  "start_url": "/",
+  "name": "きげんメモ",
+  "short_name": "きげんメモ",
+  "start_url": "/kigen-memo/",
+  "scope": "/kigen-memo/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#a8d5c2"
+  "theme_color": "#a8d5c2",
+  "icons": [
+    {
+      "src": "images/strawberry_icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/strawberry_icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
