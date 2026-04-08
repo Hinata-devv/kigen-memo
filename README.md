@@ -6,7 +6,7 @@
 ---
 
 ## 🔗 デモURL
-https://hinata-dev.github.io/kigen-memo/
+https://hinata-devv.github.io/kigen-memo/
 
 ※スマホからの利用を想定しています
 
